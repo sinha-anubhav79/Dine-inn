@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'signup.dart';
+import 'discover.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,8 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: <String, WidgetBuilder>{
-        '/signup': (BuildContext context) => new SignupPage()
+        '/signup': (BuildContext context) => new SignupPage(),
+        '/discover': (BuildContext context) => new RestaurantOptions()
       },
       home: new LoginPage(),
     );
@@ -102,8 +104,10 @@ class _LoginPageState extends State<LoginPage> {
                           shadowColor: Color(0xFF437F97),
                           color: Color(0xFFF2A22C),
                           elevation: 7.0,
-                          child: GestureDetector(
-                            onTap: () {},
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed('/discover');
+                            },
                             child: Center(
                               child: Text(
                                 'LOGIN',
