@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class RestaurantOptions extends StatefulWidget {
   @override
@@ -42,9 +43,6 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
                         backgroundColor: Color(0xFFF2A22C),
                         child: InkWell(
                           onTap: () {
-                            //menuBar()
-                            //scaffoldKey.currentState.openEndDrawer();
-                            //Scaffold.of(context).openEndDrawer();
                             _openDrawer();
                           },
                           child: Icon(
@@ -77,24 +75,15 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
             ),
             Container(
               child: Expanded(
-                  child: ListView(
-                    children: <Widget>[
-                      buildItem(
-                          "Hans Regency",
-                          "123 reviews = Sector 1, Bokaro",
-                          "https://images.pexels.com/photos/3676531/pexels-photo-3676531.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-                          4.5),
-                      buildItem(
-                          "Mansarover",
-                          "98 reviews = Sector-4, Bokaro",
-                          "https://images.pexels.com/photos/1147993/pexels-photo-1147993.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-                          4.0),
-                      buildItem(
-                          "Hotel Classic",
-                          "106 reviews = Sector-4, Bokaro",
-                          "https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-                          4.2),
-                    ],
+                  child: FutureBuilder(builder: (context, snapshot) {
+                    var showData = json.decode(snapshot.data.toString());
+                    return ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          return buildItem(showData[index]['name'], showData[index]['address'], showData[index]['url'], showData[index]['rating']);
+                          },
+                        itemCount: showData == null ? 0 : showData.length,
+                      );
+                    }, future: DefaultAssetBundle.of(context).loadString("lib/restaurants.json"),
                   )),
             ),
           ],

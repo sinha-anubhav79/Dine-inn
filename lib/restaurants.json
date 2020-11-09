@@ -1,0 +1,23 @@
+[
+  {
+    "id": "r0001",
+    "name": "Hans Regency",
+    "address": "Sector 1, Bokaro",
+    "url": "https://images.pexels.com/photos/3676531/pexels-photo-3676531.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "rating": 4.5
+  },
+  {
+    "id": "r0002",
+    "name": "Mansarover",
+    "address": "Sector 4, Bokaro",
+    "url": "https://images.pexels.com/photos/1147993/pexels-photo-1147993.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+    "rating": 4.0
+  },
+  {
+    "id": "r0003",
+    "name": "Hotel Classic",
+    "address": "Sector 4, Bokaro",
+    "url": "https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    "rating": 4.2
+  }
+]
