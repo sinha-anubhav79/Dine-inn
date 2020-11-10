@@ -1,3 +1,4 @@
+import 'package:dine_inn/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -111,7 +112,10 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
                             },
                             child: Center(
                               child: Text('LOGIN',
