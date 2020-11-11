@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "159702759332",
+    "firebase_url": "https://dine-inn-2db02.firebaseio.com",
+    "project_id": "dine-inn-2db02",
+    "storage_bucket": "dine-inn-2db02.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159702759332:android:b5289ed65079e2c414b331",
+        "android_client_info": {
+          "package_name": "in.co.sinhaanubhav79.dine_inn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159702759332-3pafmociqega6cic8q5s3jtercnf3ucb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "in.co.sinhaanubhav79.dine_inn",
+            "certificate_hash": "aaf8f8a2a546e29907d962535ef6deffcff9fd5b"
+          }
+        },
+        {
+          "client_id": "159702759332-b89phnqota25hveekjk47vqg9j51e94p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZGCRPq4omrd94XtOwQbLEXZOisZAeOvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "159702759332-b89phnqota25hveekjk47vqg9j51e94p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

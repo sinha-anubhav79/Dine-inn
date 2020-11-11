@@ -1,11 +1,12 @@
-import 'package:dine_inn/loginPage.dart';
 import 'package:dine_inn/Home.dart';
 import 'package:dine_inn/discover.dart';
 import 'package:dine_inn/history.dart';
 import 'package:dine_inn/About.dart';
+import 'package:dine_inn/loginPage.dart';
 import 'package:dine_inn/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MenuBar extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class MenuBar extends StatefulWidget {
 }
 
 class _MenuBarState extends State<MenuBar> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -84,16 +86,22 @@ class _MenuBarState extends State<MenuBar> {
           ),
           ListTile(
               title: Text('Logout'),
-              onTap: () {
+              onTap: () async{
                 Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                );
+                _signOut().whenComplete(() {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+                });
+                /**/
               }
           )
         ],
       ),
     );
+  }
+  Future _signOut() async{
+    await auth.signOut();
   }
 }

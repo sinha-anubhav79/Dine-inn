@@ -1,6 +1,8 @@
+import 'package:dine_inn/Home.dart';
 import 'package:dine_inn/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignupPage extends StatefulWidget {
   @override
@@ -8,6 +10,11 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  TextEditingController _displayName = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -43,35 +50,63 @@ class _SignupPageState extends State<SignupPage> {
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: 'USERNAME',
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            )
+                      Form(
+                        key: _formkey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _displayName,
+                              decoration: InputDecoration(
+                                  labelText: 'FULL NAME',
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  ),
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your name';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  labelText: 'EMAIL',
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  )
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your e-mail';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+                            TextFormField(
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                  labelText: 'PASSWORD',
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  )
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter a password';
+                                }
+                                return null;
+                              },
+                              obscureText: true,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: 'EMAIL',
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            )
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: 'PASSWORD',
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            )
-                        ),
-                        obscureText: true,
                       ),
                       SizedBox(height: 20.0),
                       Container(
@@ -81,8 +116,11 @@ class _SignupPageState extends State<SignupPage> {
                           shadowColor: Color(0xFF437F97),
                           color: Color(0xFFF2A22C),
                           elevation: 7.0,
-                          child: GestureDetector(
-                            onTap: ()  {
+                          child: InkWell(
+                            onTap: ()  async{
+                              if (_formkey.currentState.validate()) {
+                                _registerAccount();
+                              }
                             },
                             child: Center(
                               child: Text(
@@ -135,5 +173,22 @@ class _SignupPageState extends State<SignupPage> {
           ),
         )
     );
+  }
+  void _registerAccount() async {
+    final User user = (await auth.createUserWithEmailAndPassword(
+        email: _emailController.text,
+        password: _passwordController.text)
+    ).user;
+
+    if(user != null) {
+      if(!user.emailVerified) {
+        await user.sendEmailVerification();
+      }
+      await user.updateProfile(displayName: _displayName.text);
+      final user1 = auth.currentUser;
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+        return HomePage(user: user1,);
+      }));
+    }
   }
 }

@@ -1,5 +1,7 @@
 import 'package:dine_inn/Home.dart';
 import 'package:dine_inn/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,9 +11,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldkey,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: ConstrainedBox(
@@ -45,25 +53,46 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.only(left: 20.0, right: 20.0),
                   child: Column(
                     children: <Widget>[
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: 'EMAIL',
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            )
+                      Form(
+                        key: _formkey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _emailController,
+                              decoration: InputDecoration(
+                                  labelText: 'EMAIL',
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  )
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter your e-mail';
+                                }
+                                return null;
+                              },
+                            ),
+                            SizedBox(height: 20.0),
+                            TextFormField(
+                              controller: _passwordController,
+                              decoration: InputDecoration(
+                                  labelText: 'PASSWORD',
+                                  labelStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.grey,
+                                  )
+                              ),
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter a password';
+                                }
+                                return null;
+                              },
+                              obscureText: true,
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 20.0),
-                      TextField(
-                        decoration: InputDecoration(
-                            labelText: 'PASSWORD',
-                            labelStyle: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            )
-                        ),
-                        obscureText: true,
                       ),
                       SizedBox(height: 5.0),
                       Container(
@@ -89,11 +118,10 @@ class _LoginPageState extends State<LoginPage> {
                           color: Color(0xFFF2A22C),
                           elevation: 7.0,
                           child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => HomePage()),
-                              );
+                            onTap: () async{
+                              if (_formkey.currentState.validate()) {
+                                _signinWithEmailPassword();
+                              }
                             },
                             child: Center(
                               child: Text(
@@ -207,5 +235,26 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
     );
+  }
+  void _signinWithEmailPassword () async{
+    try{
+      final User user = (await auth.signInWithEmailAndPassword(
+      email: _emailController.text,
+      password: _passwordController.text)
+    ).user;
+    if(!user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+        return HomePage(
+          user: user,
+        );
+      }));
+    } catch(e) {
+      _scaffoldkey.currentState.showSnackBar(SnackBar(
+        content: Text("Failed to sign in with email and password"),
+      ));
+    print(e);
+    }
   }
 }
