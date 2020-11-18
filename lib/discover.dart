@@ -45,16 +45,12 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      CircleAvatar(
-                        backgroundColor: Color(0xFFF2A22C),
+                      ClipOval(
                         child: InkWell(
                           onTap: () {
                             _openDrawer();
                           },
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.black
-                          ),
+                          child: (user != null)?Image.network(user.photoURL,height: 45, fit: BoxFit.cover,):Image.asset('assets/images/personIcon.png')
                         )
                       )
                     ],

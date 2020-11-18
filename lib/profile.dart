@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:dine_inn/ManageUser.dart';
 import 'package:dine_inn/MenuBar.dart';
+import 'package:dine_inn/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final User user = context.watch<User>();
-    //File _dpName = File(user.photoURL);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFF2A22C),
@@ -37,11 +38,41 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 40.0),
-            //(_dpName!=null)?Image.file(_dpName):Text('no image found'),
+            if(user != null)
             Image.network(user.photoURL),
             Container(
-              child: Text('Your name is ${user.displayName}'??'cannot get name'),
-            )
+              child: Text('Your name is ${(user != null)?user.displayName:' - '}'),
+            ),
+            SizedBox(height: 20.0,),
+            Container(
+              height: 40.0,
+              child: Material(
+                borderRadius: BorderRadius.circular(20.0),
+                shadowColor: Color(0xFF437F97),
+                color: Color(0xFFF2A22C),
+                elevation: 7.0,
+                child: InkWell(
+                  onTap: () async{
+                    context.read<AuthenticationService>().logout().whenComplete(() {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    });
+                  },
+                  child: Center(
+                    child: Text(
+                      'LOGOUT',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0,)
           ],
         ),
       ),

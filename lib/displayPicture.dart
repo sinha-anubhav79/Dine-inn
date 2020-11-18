@@ -44,7 +44,6 @@ class _DisplayPictureState extends State<DisplayPicture> {
   }
 
   Future<void> uploadImage(BuildContext context, User user) async{
-    //String fileName = basename(_imageFile.path);
     var snapshot = await FirebaseStorage.instance.ref().child('uploads/${user.email}_dp.jpg').putFile(_imageFile);
     var referenceURL = await snapshot.ref.getDownloadURL();
 

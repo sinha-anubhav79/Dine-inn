@@ -13,7 +13,7 @@ class AuthenticationService{
 
   Stream<User> get authStateChanges => _firebaseAuth.idTokenChanges();
 
-  Future logout() async{
+  Future<void> logout() async{
     await auth.signOut();
   }
 
@@ -32,7 +32,7 @@ class AuthenticationService{
         );
       }));
     } catch(e) {
-      scaffoldKey.currentState.showSnackBar(SnackBar(
+      scaffoldKey.currentState.showSnackBar(new SnackBar(
         content: Text("Failed to sign in with email and password"),
       ));
       print(e);

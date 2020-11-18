@@ -7,7 +7,6 @@ import 'package:dine_inn/history.dart';
 import 'package:dine_inn/About.dart';
 import 'package:dine_inn/loginPage.dart';
 import 'package:dine_inn/profile.dart';
-import 'package:dine_inn/uploadImage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +21,6 @@ class MenuBar extends StatefulWidget {
 }
 
 class _MenuBarState extends State<MenuBar> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final User user = context.watch<User>();
@@ -30,15 +28,11 @@ class _MenuBarState extends State<MenuBar> {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundColor: Colors.white,
-              child: (user.photoURL != null)?Image.network(user.photoURL):Icon(
-                Icons.person,
-                color: Colors.black,
-              ),
+            currentAccountPicture: ClipOval(
+              child: (user != null)?Image.network(user.photoURL, fit: BoxFit.cover,):Icon(Icons.person, color: Colors.black,)
             ),
-            accountName: Text(widget.user.displayName??'display name'),
-            accountEmail: Text(widget.user.email??'display email'),
+            accountName: Text((user != null) ? widget.user.displayName:'display name'),
+            accountEmail: Text((user != null) ? widget.user.email:'display email'),
             decoration: BoxDecoration(
               color: Color(0xFFF2A22C),
             ),
@@ -96,6 +90,7 @@ class _MenuBarState extends State<MenuBar> {
           ListTile(
               title: Text('Logout'),
               onTap: () async{
+                Navigator.of(context).pop();
                 context.read<AuthenticationService>().logout().whenComplete(() {
                   Navigator.pushReplacement(
                     context,

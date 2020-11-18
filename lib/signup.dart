@@ -121,38 +121,6 @@ class _SignupPageState extends State<SignupPage> {
                         ),
                       ),
                       SizedBox(height: 20.0),
-                      Container(
-                        height: 40.0,
-                        color: Colors.transparent,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Color(0xFFF2A22C),
-                              style: BorderStyle.solid,
-                              width: 1.0,
-                            ),
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => DisplayPicture()),
-                              );
-                              _dpName = widget.imageUrl;
-                            },
-                            child: Center(
-                              child: Text('ADD DISPLAY PICTURE',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                      fontWeight: FontWeight.bold
-                                  )
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
                       SizedBox(height: 20.0),
                       Container(
                         height: 40.0,

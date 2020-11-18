@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             Container(
+              alignment: Alignment.center,
               child: Text(
                 'Home Page',
                 style: TextStyle(
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 40.0),
             Container(
-              child: Text(user.displayName??'home display name'),
+              child: Text((user != null)?user.displayName:'home display name'),
             )
           ],
         ),
