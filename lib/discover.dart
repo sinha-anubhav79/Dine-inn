@@ -1,9 +1,14 @@
 import 'package:dine_inn/MenuBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 
 class RestaurantOptions extends StatefulWidget {
+  final User user;
+
+  const RestaurantOptions({Key key, this.user}) : super(key: key);
   @override
   _RestaurantOptionsState createState() => new _RestaurantOptionsState();
 }
@@ -16,12 +21,13 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = context.watch<User>();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFF2A22C),
       ),
       key: scaffoldKey,
-      drawer: MenuBar(),
+      drawer: MenuBar(user: user,),
       body: Container(
         child: Column(
           children: <Widget>[

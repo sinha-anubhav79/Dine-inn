@@ -1,10 +1,18 @@
 import 'package:dine_inn/Home.dart';
+import 'package:dine_inn/displayPicture.dart';
+
 import 'package:dine_inn/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:dine_inn/ManageUser.dart';
+import 'package:provider/provider.dart';
 
 class SignupPage extends StatefulWidget {
+  final String imageUrl;
+
+  const SignupPage({Key key, this.imageUrl}) : super(key: key);
   @override
   _SignupPageState createState() => new _SignupPageState();
 }
@@ -15,6 +23,9 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _displayName = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  //TextEditingController _phoneController = TextEditingController();
+  String _dpName;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -72,6 +83,7 @@ class _SignupPageState extends State<SignupPage> {
                             ),
                             SizedBox(height: 20.0),
                             TextFormField(
+                              keyboardType: TextInputType.emailAddress,
                               controller: _emailController,
                               decoration: InputDecoration(
                                   labelText: 'EMAIL',
@@ -111,32 +123,6 @@ class _SignupPageState extends State<SignupPage> {
                       SizedBox(height: 20.0),
                       Container(
                         height: 40.0,
-                        child: Material(
-                          borderRadius: BorderRadius.circular(20.0),
-                          shadowColor: Color(0xFF437F97),
-                          color: Color(0xFFF2A22C),
-                          elevation: 7.0,
-                          child: InkWell(
-                            onTap: ()  async{
-                              if (_formkey.currentState.validate()) {
-                                _registerAccount();
-                              }
-                            },
-                            child: Center(
-                              child: Text(
-                                'SIGN UP',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20.0,),
-                      Container(
-                        height: 40.0,
                         color: Colors.transparent,
                         child: Container(
                           decoration: BoxDecoration(
@@ -152,12 +138,14 @@ class _SignupPageState extends State<SignupPage> {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => LoginPage()),
+                                MaterialPageRoute(builder: (context) => DisplayPicture()),
                               );
+                              _dpName = widget.imageUrl;
                             },
                             child: Center(
-                              child: Text('LOGIN',
+                              child: Text('ADD DISPLAY PICTURE',
                                   style: TextStyle(
+                                    color: Colors.grey,
                                       fontWeight: FontWeight.bold
                                   )
                               ),
@@ -165,30 +153,71 @@ class _SignupPageState extends State<SignupPage> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 20.0),
+                      Container(
+                        height: 40.0,
+                        child: Material(
+                          borderRadius: BorderRadius.circular(20.0),
+                          shadowColor: Color(0xFF437F97),
+                          color: Color(0xFFF2A22C),
+                          elevation: 7.0,
+                          child: InkWell(
+                            onTap: ()  async{
+                              if (_formkey.currentState.validate()) {
+                                context.read<AuthenticationService>().registerAccount(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    displayName: _displayName.text,
+                                    context: context
+                                );
+                              }
+                            },
+                            child: Center(
+                              child: Text(
+                                'SIGN UP',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 25.0,),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Already have an account? '),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => LoginPage()),
+                                );
+                              },
+                              child: Center(
+                                child: Text('Login',
+                                    style: TextStyle(
+                                        color: Color(0xFFF2A22C),
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.underline
+                                    )
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.0,),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-        )
+        ),
     );
-  }
-  void _registerAccount() async {
-    final User user = (await auth.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text)
-    ).user;
-
-    if(user != null) {
-      if(!user.emailVerified) {
-        await user.sendEmailVerification();
-      }
-      await user.updateProfile(displayName: _displayName.text);
-      final user1 = auth.currentUser;
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return HomePage(user: user1,);
-      }));
-    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:dine_inn/MenuBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   final User user;
@@ -12,16 +13,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
   final FirebaseAuth auth = FirebaseAuth.instance;
   final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    final User user = context.watch<User>();
     return Scaffold(
       key: _scaffoldkey,
       appBar: AppBar(
         backgroundColor: Color(0xFFF2A22C),
       ),
-      drawer: MenuBar(),
+      drawer: MenuBar(user: user,),
       body: Container(
         padding: EdgeInsets.only(left: 25.0, top: 25.0, right: 25.0),
         child: Column(
@@ -37,7 +40,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 40.0),
             Container(
-              child: Text(widget.user.displayName),
+              child: Text(user.displayName??'home display name'),
             )
           ],
         ),

@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dine_inn/ManageUser.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,12 +16,12 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      key: _scaffoldkey,
+      key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: ConstrainedBox(
@@ -54,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     children: <Widget>[
                       Form(
-                        key: _formkey,
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFormField(
@@ -119,8 +121,13 @@ class _LoginPageState extends State<LoginPage> {
                           elevation: 7.0,
                           child: InkWell(
                             onTap: () async{
-                              if (_formkey.currentState.validate()) {
-                                _signinWithEmailPassword();
+                              if (_formKey.currentState.validate()) {
+                                context.read<AuthenticationService>().loginFunction(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                    scaffoldKey: _scaffoldKey,
+                                    context: context
+                                );
                               }
                             },
                             child: Center(
@@ -235,26 +242,5 @@ class _LoginPageState extends State<LoginPage> {
           ),
         )
     );
-  }
-  void _signinWithEmailPassword () async{
-    try{
-      final User user = (await auth.signInWithEmailAndPassword(
-      email: _emailController.text,
-      password: _passwordController.text)
-    ).user;
-    if(!user.emailVerified) {
-      await user.sendEmailVerification();
-    }
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
-        return HomePage(
-          user: user,
-        );
-      }));
-    } catch(e) {
-      _scaffoldkey.currentState.showSnackBar(SnackBar(
-        content: Text("Failed to sign in with email and password"),
-      ));
-    print(e);
-    }
   }
 }
