@@ -1,20 +1,36 @@
 import 'package:dine_inn/displayPicture.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:dine_inn/Home.dart';
-import 'package:dine_inn/loginPage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationService{
   final FirebaseAuth _firebaseAuth;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   AuthenticationService(this._firebaseAuth);
 
   Stream<User> get authStateChanges => _firebaseAuth.idTokenChanges();
 
   Future<void> logout() async{
     await auth.signOut();
+  }
+
+  Future<String> googleSignIn() async{
+    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+    final AuthCredential authCredential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken
+    );
+    final UserCredential userCredential = await auth.signInWithCredential(authCredential);
+    final User user = userCredential.user;
+    assert(user.displayName != null);
+    assert(user.email != null);
+    final User currentUser = auth.currentUser;
+    assert(currentUser.uid == user.uid);
+    return 'Error Occured while signing in with google';
   }
 
   void loginFunction ({String email, String password,GlobalKey<ScaffoldState> scaffoldKey, BuildContext context}) async{

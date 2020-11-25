@@ -1,6 +1,3 @@
-import 'package:dine_inn/Home.dart';
-import 'package:dine_inn/displayPicture.dart';
-
 import 'package:dine_inn/loginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +20,6 @@ class _SignupPageState extends State<SignupPage> {
   TextEditingController _displayName = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  //TextEditingController _phoneController = TextEditingController();
   String _dpName;
 
   @override

@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  //final AuthenticationService authenticationService = AuthenticationService();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -190,23 +191,28 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Center(
-                                child: ImageIcon(AssetImage('assets/images/google.png')),
-                              ),
-                              SizedBox(width: 10.0,),
-                              Center(
-                                child: Text(
-                                  'Log in with Google',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFF2A22C),
-                                  ),
+                          child: InkWell(
+                            onTap: () async{
+                              await context.read<AuthenticationService>().googleSignIn();
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Center(
+                                  child: ImageIcon(AssetImage('assets/images/google.png')),
                                 ),
-                              )
-                            ],
+                                SizedBox(width: 10.0,),
+                                Center(
+                                  child: Text(
+                                    'Log in with Google',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFF2A22C),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
