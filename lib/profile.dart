@@ -20,6 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final User user = context.watch<User>();
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Color(0xFFF2A22C),
       ),
@@ -30,49 +31,89 @@ class _ProfilePageState extends State<ProfilePage> {
           children: [
             Container(
               child: Text(
-                'Profile',
+                'My Profile',
                 style: TextStyle(
                   fontSize: 50.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            SizedBox(height: 40.0),
-            if(user != null)
-            Image.network(user.photoURL),
             Container(
-              child: Text('Your name is ${(user != null)?user.displayName:' - '}'),
-            ),
-            SizedBox(height: 20.0,),
-            Container(
-              height: 40.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(20.0),
-                shadowColor: Color(0xFF437F97),
-                color: Color(0xFFF2A22C),
-                elevation: 7.0,
-                child: InkWell(
-                  onTap: () async{
-                    context.read<AuthenticationService>().logout().whenComplete(() {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    });
-                  },
-                  child: Center(
-                    child: Text(
-                      'LOGOUT',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+              height:480,
+              margin:EdgeInsets.symmetric(horizontal:10,vertical:10),
+              decoration: BoxDecoration(
+                  color:Colors.white,
+                  boxShadow:[ BoxShadow(color:Colors.white,blurRadius: 10
+                      ,offset: Offset(0,10))]),
+
+              child: Padding(
+                  padding: EdgeInsets.symmetric(vertical:5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: ClipOval(
+
+                            child: (user != null)?Image.network(user.photoURL, height: 250,):Icon(Icons.person),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
+                      SizedBox(height:25),
+                      Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Column(
+                          children: [
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children:[
+                                  Icon(Icons.person),
+                                  SizedBox(width: 20,),
+                                  Text('${(user != null)?user.displayName:' - '}',
+                                      style:TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color:Color(0xFFF2A22C)
+                                      )
+                                  )
+                                ]
+                            ),
+                            SizedBox(height:20),
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children:[
+                                  Icon(Icons.mail),
+                                  SizedBox(width: 20,),
+                                  Text('${(user != null)?user.email:' - '}',
+                                      style:TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color:Color(0xFFF2A22C)
+                                      )
+                                  )
+                                ]
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      RaisedButton(
+                          onPressed: () async{
+                            context.read<AuthenticationService>().logout().whenComplete(() {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
+                            });
+                          },
+                          child:Text("SignOut",
+                              style:TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,)),
+                          color: Colors.red[100]
+                      ),
+                    ],
+                  )
               ),
             ),
-            SizedBox(height: 20.0,)
           ],
         ),
       ),
