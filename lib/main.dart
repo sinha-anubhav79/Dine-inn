@@ -1,4 +1,3 @@
-
 import 'package:dine_inn/Home.dart';
 import 'package:dine_inn/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -7,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dine_inn/loginPage.dart';
 import 'package:dine_inn/ManageUser.dart';
+import 'dart:ui';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
           create: (_) => AuthenticationService(FirebaseAuth.instance),
         ),
         StreamProvider(
-          create: (context) => context.read<AuthenticationService>().authStateChanges,
+          create: (context) =>
+              context.read<AuthenticationService>().authStateChanges,
         )
       ],
       child: MaterialApp(
@@ -43,7 +45,9 @@ class AuthenticationWrapper extends StatelessWidget {
     final User user = context.watch<User>();
 
     if (user != null) {
-      return HomePage(user: user,);
+      return HomePage(
+        user: user,
+      );
     }
     return LoginPage();
   }

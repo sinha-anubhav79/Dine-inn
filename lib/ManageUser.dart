@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:dine_inn/Home.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 class AuthenticationService{
   final FirebaseAuth _firebaseAuth;
@@ -16,6 +18,34 @@ class AuthenticationService{
   Future<void> logout() async{
     await auth.signOut();
   }
+
+
+  void signInFacebook({BuildContext context}) async {
+
+    FacebookLogin facebookLogin = FacebookLogin();
+
+    final result = await facebookLogin.logIn(['email']);
+    final token = result.accessToken.token;
+    final graphResponse = await http.get(
+        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name&access_token=$token');
+    print(graphResponse.body);
+    if (result.status == FacebookLoginStatus.loggedIn) {
+      final credential = FacebookAuthProvider.credential(token);
+      final UserCredential userCredential = await auth.signInWithCredential(credential);
+      final User user = userCredential.user;
+      assert(user.displayName != null);
+      assert(user.email != null);
+      final User currentUser = auth.currentUser;
+      assert(currentUser.uid == user.uid);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){
+        return HomePage(
+          user: user,
+        );
+      }));
+    }
+  }
+
+
 
   Future<String> googleSignIn() async{
     final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
@@ -67,7 +97,7 @@ class AuthenticationService{
       }
       await user.updateProfile(displayName: displayName);
       final user1 = auth.currentUser;
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return DisplayPicture(user: user1,);}));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return DisplayPicture(user: user1, changeDp: false,);}));
       //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context){return HomePage(user: user1,);}));
     }
   }

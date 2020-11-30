@@ -157,23 +157,28 @@ class _LoginPageState extends State<LoginPage> {
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Center(
-                                child: ImageIcon(AssetImage('assets/images/facebook.png')),
-                              ),
-                              SizedBox(width: 10.0,),
-                              Center(
-                                child: Text(
-                                  'Log in with Facebook',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFF2A22C),
-                                  ),
+                          child: InkWell(
+                            onTap: () async{
+                              context.read<AuthenticationService>().signInFacebook(context: context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Center(
+                                  child: ImageIcon(AssetImage('assets/images/facebook.png')),
                                 ),
-                              )
-                            ],
+                                SizedBox(width: 10.0,),
+                                Center(
+                                  child: Text(
+                                    'Log in with Facebook',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFFF2A22C),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dine_inn/ManageUser.dart';
 import 'package:dine_inn/MenuBar.dart';
+import 'package:dine_inn/displayPicture.dart';
 import 'package:dine_inn/loginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,19 +44,29 @@ class _ProfilePageState extends State<ProfilePage> {
               margin:EdgeInsets.symmetric(horizontal:10,vertical:10),
               decoration: BoxDecoration(
                   color:Colors.white,
-                  boxShadow:[ BoxShadow(color:Colors.white,blurRadius: 10
-                      ,offset: Offset(0,10))]),
-
+                  boxShadow:[BoxShadow(
+                      color:Colors.white,
+                      blurRadius: 10,
+                      offset: Offset(0,10)
+                  )]
+              ),
               child: Padding(
                   padding: EdgeInsets.symmetric(vertical:5),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Center(
-                        child: ClipOval(
-
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => DisplayPicture(user: user, changeDp: true,)),
+                            ).then((value) => setState((){}));
+                          },
+                          child: ClipOval(
                             child: (user != null)?Image.network(user.photoURL, height: 250,):Icon(Icons.person),
-                        ),
+                          ),
+                        )
                       ),
                       SizedBox(height:25),
                       Padding(
@@ -67,12 +78,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children:[
                                   Icon(Icons.person),
                                   SizedBox(width: 20,),
-                                  Text('${(user != null)?user.displayName:' - '}',
-                                      style:TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color:Color(0xFFF2A22C)
-                                      )
+                                  Flexible(
+                                    child: Text('${(user != null)?user.displayName:' - '}',
+                                        style:TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color:Color(0xFFF2A22C)
+                                        )
+                                    ),
                                   )
                                 ]
                             ),
@@ -82,12 +95,14 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children:[
                                   Icon(Icons.mail),
                                   SizedBox(width: 20,),
-                                  Text('${(user != null)?user.email:' - '}',
-                                      style:TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color:Color(0xFFF2A22C)
-                                      )
+                                  Flexible(
+                                    child: Text('${(user != null)?user.email:' - '}',
+                                        style:TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color:Color(0xFFF2A22C)
+                                        )
+                                    ),
                                   )
                                 ]
                             ),

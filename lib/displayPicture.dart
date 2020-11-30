@@ -14,8 +14,9 @@ import 'package:path/path.dart';
 
 class DisplayPicture extends StatefulWidget {
   final User user;
+  final bool changeDp;
 
-  const DisplayPicture({Key key, this.user}) : super(key: key);
+  const DisplayPicture({Key key, this.user, this.changeDp}) : super(key: key);
   @override
   _DisplayPictureState createState() => _DisplayPictureState();
 }
@@ -52,6 +53,7 @@ class _DisplayPictureState extends State<DisplayPicture> {
     });
 
     await widget.user.updateProfile(photoURL: await snapshot.ref.getDownloadURL());
+    (widget.changeDp)?Navigator.of(context).pop():
     context.read<AuthenticationService>().logout().whenComplete(() {
       Navigator.pushReplacement(
         context,
