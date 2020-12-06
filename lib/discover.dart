@@ -1,5 +1,4 @@
 import 'package:dine_inn/MenuBar.dart';
-import 'package:dine_inn/booking.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -82,7 +81,7 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
                     var showData = json.decode(snapshot.data.toString());
                     return ListView.builder(
                         itemBuilder: (BuildContext context, int index) {
-                          return buildItem(showData[index]['name'], showData[index]['address'], showData[index]['url'], showData[index]['rating'], context, user);
+                          return buildItem(showData[index]['name'], showData[index]['address'], showData[index]['url'], showData[index]['rating']);
                           },
                         itemCount: showData == null ? 0 : showData.length,
                       );
@@ -98,14 +97,12 @@ class _RestaurantOptionsState extends State<RestaurantOptions> {
 
 
 Container buildItem(
-    String title, String subTitle, String url, double rating, BuildContext context, User user) {
+    String title, String subTitle, String url, double rating) {
   return Container(
     margin: EdgeInsets.symmetric(vertical: 12.0),
     padding: EdgeInsets.symmetric(horizontal: 25.0),
     child: InkWell(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => BookingPage(user: user,)),);
-      },
+      onTap: (){},
       child: Column(
         children: <Widget>[
           Container(
