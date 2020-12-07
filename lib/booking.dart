@@ -1,3 +1,4 @@
+import 'package:dine_inn/Home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,6 +55,7 @@ class _BookingPageState extends State<BookingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = context.watch<User>();
     return ChangeNotifierProvider(
       create:(ctx) => Books(),
       child: Scaffold(
@@ -225,11 +227,24 @@ class _BookingPageState extends State<BookingPage> {
                           RaisedButton(
                             onPressed: (){
                               _saveForm();
-                              AlertDialog(
-                                title: Text('Booking Successful'),
-                                content: Text('Your seat was booked for'),
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: Text('Booking Successful!'),
+                                  content: Text('Booked'),
+                                  actions: [
+                                    FlatButton(
+                                      child: Text('OK'),
+                                      onPressed: (){
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => HomePage(user: user,)),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               );
-                              Navigator.of(context).pop();
                             },
                             child: Text('BOOK',
                               style:TextStyle(),
