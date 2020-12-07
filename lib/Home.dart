@@ -1,5 +1,5 @@
 import 'package:dine_inn/MenuBar.dart';
-import 'package:dine_inn/widgets/categories.dart';
+//import 'package:dine_inn/widgets/categories.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
           SizedBox(
             height: 5,
           ),
-          Categories(),
+          //Categories(),
           SizedBox(
             height: 2,
           ),

@@ -1,4 +1,7 @@
 import 'package:dine_inn/Home.dart';
+import 'package:dine_inn/booking.dart';
+import 'package:dine_inn/books.dart';
+import 'package:dine_inn/booking.dart';
 import 'package:dine_inn/signup.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,6 +24,9 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider<AuthenticationService>(
           create: (_) => AuthenticationService(FirebaseAuth.instance),
+        ),
+        Provider<Books>(
+          create: (_) => Books(),
         ),
         StreamProvider(
           create: (context) =>
