@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
+import 'models/popular_restaurants.dart';
+
+
 class HomePage extends StatefulWidget {
   final User user;
 
@@ -30,11 +33,11 @@ class _HomePageState extends State<HomePage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("What would you like to eat",style:TextStyle(fontSize: 18)),
+            child: Text("What would you like to eat,",style:TextStyle(fontSize: 20)),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text((user !=null)? user.displayName:'home display name',style:TextStyle(fontSize: 28)),
+            child: Text((user !=null)? user.displayName:'home display name',style:TextStyle(fontSize: 25)),
           ),
 
         SizedBox(height: 5,),
@@ -74,82 +77,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: Text("Popular Restaurants",style:TextStyle(fontSize: 20)),
     ),
-          Container(
-            height: 240,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-                itemCount: 2,
-                itemBuilder: (_HomePageState,index){
-              return Padding(padding: EdgeInsets.all(8),
-              child: Container(
-                height: 240,
-                width: 200,
-                decoration: BoxDecoration (
-                    color:Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[300],
-                          offset: Offset(1,1),
-                          blurRadius: 4
-                      )
-                    ]
-                ),
-                child: Column(
-                  children: [
-                    Image.asset("assets/images/chinese.jpg",height: 140,width: 140,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            child: Text("Some Food",style:TextStyle(fontSize: 18)),
-                          ),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Container(
-                        decoration: BoxDecoration (
-                        borderRadius: BorderRadius.circular(20),
-                  color:Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey[300],
-                        offset: Offset(1,1),
-                        blurRadius: 4
-                    )
-                  ]
-              ),
-                  child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Icon(Icons.favorite_border,size: 20,color: Colors.red,),
-                  ),
-                  ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 4,),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:35.0),
-                          child: Text("4.7",style:TextStyle(fontSize: 17,color: Colors.grey[900])),
-                        ),
-                        SizedBox(width: 15,),
-                        Icon(Icons.star,color: Colors.red,size: 18,),
-                        Icon(Icons.star,color: Colors.red,size: 18,),
-                        Icon(Icons.star,color: Colors.red,size: 18,),
-                        Icon(Icons.star,color: Colors.red,size: 18,),
-                        Icon(Icons.star,color: Colors.grey,size: 18,),
-                      ],
-                    )
-                  ],
-                ),
-              ),);
-            }),
-          )
+          Popular()
     ],
         ),
+
     );
   }
 }
